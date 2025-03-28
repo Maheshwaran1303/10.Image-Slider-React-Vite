@@ -10,7 +10,6 @@ const images = [
 
 const ImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(false);
 
   // Auto-slide every 3 seconds
   useEffect(() => {
@@ -21,21 +20,13 @@ const ImageSlider = () => {
   }, []);
 
   const nextSlide = () => {
-    setFade(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-      setFade(false);
-    }, 500);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
   const prevSlide = () => {
-    setFade(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? images.length - 1 : prevIndex - 1
-      );
-      setFade(false);
-    }, 500);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
   };
 
   return (
@@ -45,9 +36,7 @@ const ImageSlider = () => {
         <img
           src={images[currentIndex]}
           alt={`Slide ${currentIndex + 1}`}
-          className={`w-full h-64 md:h-80 object-cover transition-opacity duration-500 ${
-            fade ? "opacity-0" : "opacity-100"
-          }`}
+          className="w-full h-64 md:h-80 object-cover transition-transform duration-500 ease-in-out"
         />
       </div>
 
