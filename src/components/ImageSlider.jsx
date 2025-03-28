@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const images = [
@@ -10,25 +10,44 @@ const images = [
 
 const ImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(false);
+
+  // Auto-slide every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 3000);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setFade(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setFade(false);
+    }, 500);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
+    setFade(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      );
+      setFade(false);
+    }, 500);
   };
 
   return (
     <div className="relative w-full max-w-3xl mx-auto mt-10">
-      {/* Image Display */}
-      <div className="overflow-hidden rounded-lg shadow-lg">
+      {/* Image Container */}
+      <div className="overflow-hidden rounded-lg shadow-lg relative">
         <img
           src={images[currentIndex]}
           alt={`Slide ${currentIndex + 1}`}
-          className="w-full h-64 md:h-80 object-cover transition-transform duration-500"
+          className={`w-full h-64 md:h-80 object-cover transition-opacity duration-500 ${
+            fade ? "opacity-0" : "opacity-100"
+          }`}
         />
       </div>
 
